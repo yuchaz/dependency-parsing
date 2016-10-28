@@ -36,14 +36,23 @@ def verify_lang_data(model, conll_output):
         ev = DependencyEvaluator(testdata, parsed)
         uas, las = ev.eval()
         print "\n=====Prediction of {}.model===== \nUAS: {} \nLAS: {}".format(lang, uas, las)
+        return las
         pass
     except ValueError as e:
         print(e)
 
+def cal_each_score(las):
+    return (min(las,0.7)/0.7)**2
+
 def main():
     lang_to_verify = ['swedish', 'danish', 'english']
+    las_list = []
     for lang in lang_to_verify:
-        verify_lang_data(lang+'.model', lang+'.conll')
+        las = verify_lang_data(lang+'.model', lang+'.conll')
+        las_list.append(las)
 
+    each_lang_score = [cal_each_score(l) for l in las_list]
+    final_score  = (each_lang_score[0]+each_lang_score[1])*25+each_lang_score[2]*50
+    print 'Score will be {}'.format(final_score)
 if __name__ == '__main__':
     main()
