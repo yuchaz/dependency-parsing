@@ -1,2 +1,10 @@
 *.pyc
 **/*.pyc
+
+*.conll
+
+*.model
+!code/badfeatures.model
+
+*.test
+!123.test
