@@ -22,7 +22,7 @@ class Transition(object):
         """
         if not conf.buffer or not conf.stack:
             return -1
-        if conf.stack[-1] == 0 or not if_have_head(conf):
+        if conf.stack[-1] == 0 or if_have_head(conf):
             return -1
 
         idx_wi = conf.stack.pop()
@@ -52,7 +52,7 @@ class Transition(object):
         """
         if not conf.buffer or not conf.stack:
             return -1
-        if if_have_head(conf):
+        if not if_have_head(conf):
             return -1
 
         conf.stack.pop()
