@@ -6,5 +6,4 @@
 *.model
 !code/badfeatures.model
 
-*.test
-!123.test
+code/*.sh

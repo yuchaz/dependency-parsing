@@ -70,6 +70,13 @@ class FeatureExtractor(object):
         if stack:
             stack_idx0 = stack[-1]
             token = tokens[stack_idx0]
+            stack_idx1 = 0
+            token_1 = {}
+
+            if len(stack) >= 3:
+                stack_idx1 = stack[-2]
+                token_1 = tokens[stack_idx1]
+
             if FeatureExtractor._check_informative(token['word'], True):
                 result.append('STK_0_FORM_' + token['word'])
 
@@ -77,13 +84,23 @@ class FeatureExtractor(object):
                 feats = token['feats'].split("|")
                 for feat in feats:
                     result.append('STK_0_FEATS_' + feat)
+                if len(stack) >= 3:
+                    feats_1 = token_1['feats'].split('|')
+                    for feat in feats_1:
+                        result.append('STK_1_FEATS_' + feat)
 
             if FeatureExtractor._check_informative(token['lemma']):
                 result.append('STK_0_LEMMA' + token['lemma'])
 
             if FeatureExtractor._check_informative(token['tag']):
                 result.append('STK_0_POSTAG' + token['tag'])
-                result.append('STK_1_POSTAG' + token['tag'])
+                if len(stack) >= 3:
+                    result.append('STK_1_POSTAG' + token_1['tag'])
+
+            if FeatureExtractor._check_informative(token['ctag']):
+                result.append('STK_0_CPOSTAG' + token['ctag'])
+                if len(stack) >= 3:
+                    result.append('STK_1_CPOSTAG' + token_1['ctag'])
 
             # Left most, right most dependency of stack[0]
             dep_left_most, dep_right_most = FeatureExtractor.find_left_right_dependencies(stack_idx0, arcs)
@@ -98,21 +115,38 @@ class FeatureExtractor(object):
             token = tokens[buffer_idx0]
             if FeatureExtractor._check_informative(token['word'], True):
                 result.append('BUF_0_FORM_' + token['word'])
-                result.append('BUF_1_FORM_' + token['word'])
+                if len(buffer) >= 2:
+                    result.append('BUF_1_FORM_' + tokens[buffer[1]]['word'])
 
             if FeatureExtractor._check_informative(token['lemma']):
                 result.append('BUF_0_LEMMA' + token['lemma'])
 
+            if FeatureExtractor._check_informative(token['tag']):
+                result.append('BUF_0_POSTAG' + token['tag'])
+                if len(buffer) >= 2:
+                    result.append('BUF_1_POSTAG' + tokens[buffer[1]]['tag'])
+                if len(buffer) >= 3:
+                    result.append('BUF_2_POSTAG' + tokens[buffer[2]]['tag'])
+                if len(buffer) >= 4:
+                    result.append('BUF_3_POSTAG' + tokens[buffer[3]]['tag'])
+
             if FeatureExtractor._check_informative(token['ctag']):
-                result.append('BUF_0_POSTAG' + token['ctag'])
-                result.append('BUF_1_POSTAG' + token['ctag'])
-                result.append('BUF_2_POSTAG' + token['ctag'])
-                result.append('BUF_3_POSTAG' + token['ctag'])
+                result.append('BUF_0_CPOSTAG' + token['ctag'])
+                if len(buffer) >= 2:
+                    result.append('BUF_1_CPOSTAG' + tokens[buffer[1]]['ctag'])
+                if len(buffer) >= 3:
+                    result.append('BUF_2_CPOSTAG' + tokens[buffer[2]]['ctag'])
+                if len(buffer) >= 4:
+                    result.append('BUF_3_CPOSTAG' + tokens[buffer[3]]['ctag'])
 
             if 'feats' in token and FeatureExtractor._check_informative(token['feats']):
                 feats = token['feats'].split("|")
                 for feat in feats:
                     result.append('BUF_0_FEATS_' + feat)
+                if len(buffer) >= 2:
+                    feats_1 = tokens[buffer[1]]['feats'].split("|")
+                    for feat in feats_1:
+                        result.append('BUF_1_FEATS_' + feat)
 
             dep_left_most, dep_right_most = FeatureExtractor.find_left_right_dependencies(buffer_idx0, arcs)
 
