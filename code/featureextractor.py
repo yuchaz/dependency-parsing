@@ -77,6 +77,7 @@ class FeatureExtractor(object):
                 feats = token['feats'].split("|")
                 for feat in feats:
                     result.append('STK_0_FEATS_' + feat)
+                    result.append('STK_1_FEATS_' + feat)
 
             if FeatureExtractor._check_informative(token['lemma']):
                 result.append('STK_0_LEMMA' + token['lemma'])
@@ -123,6 +124,7 @@ class FeatureExtractor(object):
                 feats = token['feats'].split("|")
                 for feat in feats:
                     result.append('BUF_0_FEATS_' + feat)
+                    result.append('BUF_1_FEATS_' + feat)
 
             dep_left_most, dep_right_most = FeatureExtractor.find_left_right_dependencies(buffer_idx0, arcs)
 
