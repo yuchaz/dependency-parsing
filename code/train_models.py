@@ -1,4 +1,5 @@
 import random
+import sys
 from providedcode import dataset
 from providedcode.transitionparser import TransitionParser
 from featureextractor import FeatureExtractor
@@ -15,7 +16,12 @@ def get_train_data_from_lang(lang):
         raise ValueError("Please don't use {}, only use english, swedish or danish".format(lang))
 
 def main():
-    lang_train_list = ['swedish', 'danish', 'english']
+    lang_train_list = []
+    if len(sys.argv) == 1:
+        lang_train_list = ['swedish', 'danish', 'english']
+    else:
+        lang_train_list = sys.argv[1:]
+
     random.seed(1126)
 
     for lang in lang_train_list:

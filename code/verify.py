@@ -1,3 +1,4 @@
+import sys
 from providedcode import dataset
 from providedcode.transitionparser import TransitionParser
 from providedcode.evaluate import DependencyEvaluator
@@ -45,7 +46,12 @@ def cal_each_score(las):
     return (min(las,0.7)/0.7)**2
 
 def main():
-    lang_to_verify = ['swedish', 'danish', 'english']
+    lang_to_verify = []
+    if len(sys.argv) == 1:
+        lang_to_verify = ['swedish', 'danish', 'english']
+    else:
+        lang_to_verify = sys.argv[1:]
+
     las_list = []
     for lang in lang_to_verify:
         las = verify_lang_data(lang+'.model', lang+'.conll')
