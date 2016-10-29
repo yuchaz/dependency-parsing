@@ -103,11 +103,11 @@ class FeatureExtractor(object):
             if FeatureExtractor._check_informative(token['lemma']):
                 result.append('BUF_0_LEMMA' + token['lemma'])
 
-            if FeatureExtractor._check_informative(token['ctag']):
-                result.append('BUF_0_POSTAG' + token['ctag'])
-                result.append('BUF_1_POSTAG' + token['ctag'])
-                result.append('BUF_2_POSTAG' + token['ctag'])
-                result.append('BUF_3_POSTAG' + token['ctag'])
+            if FeatureExtractor._check_informative(token['tag']):
+                result.append('BUF_0_POSTAG' + token['tag'])
+                result.append('BUF_1_POSTAG' + token['tag'])
+                result.append('BUF_2_POSTAG' + token['tag'])
+                result.append('BUF_3_POSTAG' + token['tag'])
 
             if 'feats' in token and FeatureExtractor._check_informative(token['feats']):
                 feats = token['feats'].split("|")
